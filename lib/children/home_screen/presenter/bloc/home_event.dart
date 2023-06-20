@@ -3,8 +3,8 @@ part of 'home_bloc.dart';
 @immutable
 abstract class HomeEvent {}
 
-class ChangeFilter extends HomeEvent {
+class ChangeFilterEvent extends HomeEvent {
   final String filter;
 
-  ChangeFilter(this.filter);
+  ChangeFilterEvent(this.filter);
 }

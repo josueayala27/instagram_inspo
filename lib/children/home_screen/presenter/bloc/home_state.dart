@@ -5,3 +5,4 @@ class HomeState {
 
   HomeState({this.selectedFilter = 'All'});
 }
+
