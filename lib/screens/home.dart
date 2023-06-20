@@ -84,7 +84,7 @@ class HomeScreen extends StatelessWidget {
               return ListView(
                 padding: const EdgeInsets.all(15),
                 children: [
-                  ClippedText([state.selectedFilter, "House Plants!"]),
+                  const ClippedText(["Find Your", "House Plants!"]),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20),
                     child: SingleChildScrollView(
@@ -96,6 +96,10 @@ class HomeScreen extends StatelessWidget {
                         return Row(
                           children: [
                             GestureDetector(
+                              onTap: () => {
+                                BlocProvider.of<HomeBloc>(context)
+                                    .add(ChangeFilter(filter.title))
+                              },
                               child: HomeFilter(
                                   title: filter.title,
                                   isSelected:
