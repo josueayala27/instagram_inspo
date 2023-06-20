@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instagram_inspo/blocs/home/home_bloc.dart';
 import 'package:instagram_inspo/widgets/clipped_text.dart';
 import 'package:instagram_inspo/widgets/home_card.dart';
 import 'package:instagram_inspo/widgets/home_filter.dart';
@@ -77,49 +79,58 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
         body: SafeArea(
-          child: ListView(
-            padding: const EdgeInsets.all(15),
-            children: [
-              const ClippedText(["Find Your", "House Plants!"]),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                      children: filters.map((
-                    filter,
-                  ) {
-                    return Row(
-                      children: [
-                        HomeFilter(
-                            title: filter.title, isSelected: filter.isSelected),
-                        SizedBox(
-                          width: filter.title != 'House Plants' ? 10 : 0,
-                        ),
-                      ],
-                    );
-                  }).toList()),
-                ),
-              ),
-              GridView.builder(
-                itemCount: plants.length,
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    childAspectRatio: (1 / 1.2),
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 20,
-                    crossAxisSpacing: 20),
-                itemBuilder: (BuildContext context, int index) {
-                  return HomeCard(
-                    price: plants[index].price,
-                    category: plants[index].category,
-                    title: plants[index].title,
-                    color: plants[index].color,
-                  );
-                },
-              )
-            ],
+          child: BlocBuilder<HomeBloc, HomeState>(
+            builder: (context, state) {
+              return ListView(
+                padding: const EdgeInsets.all(15),
+                children: [
+                  ClippedText([state.selectedFilter, "House Plants!"]),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                          children: filters.map((
+                        filter,
+                      ) {
+                        return Row(
+                          children: [
+                            GestureDetector(
+                              child: HomeFilter(
+                                  title: filter.title,
+                                  isSelected:
+                                      state.selectedFilter == filter.title),
+                            ),
+                            SizedBox(
+                              width: filter.title != 'House Plants' ? 10 : 0,
+                            ),
+                          ],
+                        );
+                      }).toList()),
+                    ),
+                  ),
+                  GridView.builder(
+                    itemCount: plants.length,
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            childAspectRatio: (1 / 1.2),
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 20,
+                            crossAxisSpacing: 20),
+                    itemBuilder: (BuildContext context, int index) {
+                      return HomeCard(
+                        price: plants[index].price,
+                        category: plants[index].category,
+                        title: plants[index].title,
+                        color: plants[index].color,
+                      );
+                    },
+                  )
+                ],
+              );
+            },
           ),
         ));
   }
